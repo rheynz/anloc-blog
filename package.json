@@ -1,35 +1,29 @@
 {
-  "name": "klub-mobil-modern---blog-&-pendaftaran",
-  "private": true,
-  "version": "0.0.0",
+  "name": "anloc-website",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-hook-form": "^7.66.1",
-    "react-quill": "^2.0.0",
-    "react-router-dom": "^7.9.6",
-    "@astrojs/check": "^0.5.10",
-    "@astrojs/svelte": "^5.3.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "@aws-sdk/client-s3": "^3.556.0",
-    "@tiptap/core": "^2.3.1",
-    "@tiptap/extension-image": "^2.3.1",
-    "@tiptap/starter-kit": "^2.3.1",
-    "astro": "^4.5.12",
-    "svelte": "^4.2.12",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.3"
+    "@astrojs/cloudflare": "^11.0.1",
+    "@astrojs/rss": "^4.0.7",
+    "@astrojs/svelte": "^5.7.0",
+    "@tiptap/core": "^2.5.7",
+    "@tiptap/starter-kit": "^2.5.7",
+    "astro": "^4.12.2",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "sanitize-html": "^2.13.0",
+    "svelte": "^4.2.18"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "@types/markdown-it": "^14.1.1",
+    "@types/node": "^24.10.1",
+    "@types/sanitize-html": "^2.11.0"
   }
 }

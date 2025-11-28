@@ -1,6 +1,6 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 
 export async function getStaticPaths() {
@@ -11,9 +11,21 @@ export async function getStaticPaths() {
   }));
 }
 
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
 const { post } = Astro.props;
+
+// Fix: Add a check to handle invalid slugs.
+// If no post is found, redirect to the 404 page.
+if (!post) {
+  return Astro.redirect("/404");
+}
+
 const { Content } = await post.render();
-const { title, publishedAt, tags, excerpt } = post.frontmatter;
+// FIX: Access frontmatter from `post.data`, not `post.frontmatter`
+const { title, publishedAt, tags, excerpt } = post.data;
 ---
 
 <MainLayout title={title} description={excerpt}>

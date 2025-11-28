@@ -2,10 +2,22 @@
 import MainLayout from "../../layouts/MainLayout.astro";
 import { getCollection } from "astro:content";
 import PostPreview from "../../components/PostPreview.astro";
+import type { Post } from "../../types";
 
-const posts = (await getCollection("posts")).sort(
+const entries = (await getCollection("posts")).sort(
   (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
 );
+
+// Normalize the data shape to match our Post type
+const posts: Post[] = entries.map((post) => ({
+  id: post.slug,
+  slug: post.slug,
+  title: post.data.title,
+  publishedAt: post.data.publishedAt,
+  tags: post.data.tags,
+  excerpt: post.data.excerpt,
+  content: post.body,
+}));
 ---
 
 <MainLayout title="Blog">

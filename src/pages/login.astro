@@ -1,10 +1,10 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro";
+import AdminLayout from "../layouts/AdminLayout.astro";
 
 const hasError = Astro.url.searchParams.has("error");
 ---
 
-<MainLayout title="Admin Login">
+<AdminLayout title="Admin Login">
   <main class="container mx-auto px-4 py-16 flex justify-center">
     <div class="w-full max-w-xs">
       <form
@@ -46,4 +46,4 @@ const hasError = Astro.url.searchParams.has("error");
       </form>
     </div>
   </main>
-</MainLayout>
+</AdminLayout>

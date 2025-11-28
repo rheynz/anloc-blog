@@ -1,59 +1,33 @@
 import type { APIRoute } from 'astro';
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import fs from 'fs/promises';
+import path from 'path';
 
-export const prerender = false;
+export const POST: APIRoute = async ({ request }) => {
+    try {
+        const formData = await request.formData();
+        const image = formData.get('image') as File;
 
-export const POST: APIRoute = async ({ request, locals }) => {
-	const formData = await request.formData();
-	const file = formData.get("image") as File;
+        if (!image) {
+            return new Response(JSON.stringify({ message: 'No image provided' }), { status: 400 });
+        }
+        
+        // Create a unique filename
+        const filename = `${Date.now()}-${image.name}`;
+        const uploadDir = path.resolve(process.cwd(), 'public/uploads');
+        const imagePath = path.join(uploadDir, filename);
 
-	if (!file) {
-		return new Response(JSON.stringify({ message: "No file uploaded" }), { status: 400 });
-	}
+        // Ensure the upload directory exists
+        await fs.mkdir(uploadDir, { recursive: true });
+        
+        // Write the file to the filesystem
+        await fs.writeFile(imagePath, Buffer.from(await image.arrayBuffer()));
 
-	const runtime = locals.runtime;
-	if (!runtime) {
-		return new Response(JSON.stringify({ message: "Runtime environment not available" }), { status: 500 });
-	}
+        const imageUrl = `/uploads/${filename}`;
 
-	const env = runtime.env as {
-		R2_BUCKET_NAME: string;
-		R2_ACCOUNT_ID: string;
-		R2_ACCESS_KEY_ID: string;
-		R2_SECRET_ACCESS_KEY: string;
-		PUBLIC_R2_URL: string;
-	};
-
-	const s3 = new S3Client({
-		region: "auto",
-		endpoint: `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-		credentials: {
-			accessKeyId: env.R2_ACCESS_KEY_ID,
-			secretAccessKey: env.R2_SECRET_ACCESS_KEY,
-		},
-	});
-
-	const uniqueFileName = `${crypto.randomUUID()}-${file.name}`;
-
-	try {
-		await s3.send(
-			new PutObjectCommand({
-				Bucket: env.R2_BUCKET_NAME,
-				Key: uniqueFileName,
-				Body: await file.arrayBuffer(),
-				ContentType: file.type,
-			})
-		);
-
-		const imageUrl = `${env.PUBLIC_R2_URL}/${uniqueFileName}`;
-
-		return new Response(JSON.stringify({ url: imageUrl }), {
-			status: 200,
-			headers: { 'Content-Type': 'application/json' },
-		});
-
-	} catch (error) {
-		console.error("Error uploading to R2:", error);
-		return new Response(JSON.stringify({ message: "Failed to upload image" }), { status: 500 });
-	}
+        return new Response(JSON.stringify({ url: imageUrl }), { status: 200 });
+        
+    } catch (error) {
+        console.error(error);
+        return new Response(JSON.stringify({ message: 'An error occurred during upload.' }), { status: 500 });
+    }
 };

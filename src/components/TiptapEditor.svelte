@@ -3,15 +3,17 @@
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
   import Image from "@tiptap/extension-image";
+  import type { Post } from "../types";
 
-  export let post = null;
+  export let post: Post | null = null;
 
   let title = post?.title || "";
   let tagsString = post?.tags?.join(", ") || "";
   let excerpt = post?.excerpt || "";
   let content = post?.content || "";
   let editorElement;
-  let editor;
+  let editor: Editor;
+  let fileInput: HTMLInputElement;
 
   // Reactive states for toolbar buttons
   let isBold,
@@ -67,7 +69,7 @@
   onMount(() => {
     editor = new Editor({
       element: editorElement,
-      extensions: [StarterKit],
+      extensions: [StarterKit, Image],
       content: content,
       onUpdate: () => {
         content = editor.getHTML();
@@ -187,7 +189,20 @@
     bind:value={excerpt}
   ></textarea>
 
-  <label class="block text-sm font-medium text-gray-700">Content</label>
+  <label
+    id="content-label"
+    for="content-editor"
+    class="block text-sm font-medium text-gray-700">Content</label
+  >
+
+  <!-- Hidden file input triggered by the button -->
+  <input
+    type="file"
+    accept="image/*"
+    class="hidden"
+    bind:this={fileInput}
+    on:change={handleFileSelect}
+  />
 
   {#if editor}
     <div
@@ -291,11 +306,32 @@
           /></svg
         >
       </button>
+      <span class="toolbar-divider"></span>
+      <button
+        type="button"
+        on:click={() => fileInput.click()}
+        class="toolbar-button"
+        title="Add Image"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          ><path fill="none" d="M0 0h24v24H0z" /><path
+            d="M16 13l-4 4-4-4 1.5-1.5L12 14l2.5-2.5L16 13zm-1-5h2v2h-2V8zM4 18h16v2H4v-2zm13-9l-3-3-3 3h2v4h2V9h2zM3 3h18v2H3V3z"
+          /></svg
+        >
+      </button>
     </div>
   {/if}
   <div
+    id="content-editor"
     class="editor-content border border-gray-300 rounded-b-md p-2 border-t-0"
     bind:this={editorElement}
+    role="textbox"
+    aria-multiline="true"
+    aria-labelledby="content-label"
   ></div>
 
   <div class="flex justify-between mt-4">
@@ -317,10 +353,10 @@
 </div>
 
 <style>
-  .ProseMirror {
+  :global(.ProseMirror) {
     min-height: 300px;
   }
-  .ProseMirror:focus {
+  :global(.ProseMirror:focus) {
     outline: none;
   }
   .toolbar-button {

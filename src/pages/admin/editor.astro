@@ -1,5 +1,5 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import TiptapEditor from "../../components/TiptapEditor.svelte";
 
 import { getPost } from "../../services/posts";
@@ -9,7 +9,7 @@ const post = postId ? await getPost(postId) : null;
 const pageTitle = postId ? "Edit Post" : "New Post";
 ---
 
-<MainLayout title={pageTitle}>
+<AdminLayout title={pageTitle}>
   <main class="container mx-auto px-4 py-8">
     <div class="mb-4">
       <a href="/admin" class="text-indigo-600 hover:text-indigo-800"
@@ -18,4 +18,4 @@ const pageTitle = postId ? "Edit Post" : "New Post";
     </div>
     <TiptapEditor client:only="svelte" post={post} />
   </main>
-</MainLayout>
+</AdminLayout>

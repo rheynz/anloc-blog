@@ -1,12 +1,12 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getPosts } from "../../services/posts";
 import FormattedDate from "../../components/FormattedDate.astro";
 
 const posts = await getPosts();
 ---
 
-<MainLayout title="Admin Dashboard">
+<AdminLayout title="Admin Dashboard">
   <main class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Admin Dashboard</h1>
@@ -56,4 +56,4 @@ const posts = await getPosts();
       </ul>
     </div>
   </main>
-</MainLayout>
+</AdminLayout>

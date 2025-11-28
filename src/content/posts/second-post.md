@@ -5,4 +5,4 @@ tags: ["tutorial"]
 excerpt: "Learn more in this tutorial post which also has a custom SEO description."
 ---
 
-<p>This is another post.</p>
+This is another post.

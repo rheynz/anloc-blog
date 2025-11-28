@@ -22,7 +22,7 @@ export const GET: APIRoute = async (context) => {
             link: `/posts/${post.slug}/`,
             title: post.data.title,
             pubDate: post.data.publishedAt,
-            description: post.data.excerpt,
+            description: post.data.excerpt || '', // Add fallback for safety
             content: sanitizeHtml(parser.render(post.body)),
         })),
         // (optional) inject custom xml

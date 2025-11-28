@@ -5,4 +5,4 @@ tags: ["astro", "getting-started"]
 excerpt: "This is a short description for the very first post, designed for SEO purposes."
 ---
 
-<p>This is the first post to edit.</p>
+This is the first post to edit.

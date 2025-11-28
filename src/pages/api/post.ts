@@ -11,12 +11,9 @@ export const POST: APIRoute = async ({ request }) => {
 
         if (id) {
             // Update existing post
-            const updatedPost = await updatePost(id, { title, content, tags, excerpt });
-            if (updatedPost) {
-                return new Response(JSON.stringify(updatedPost), { status: 200 });
-            } else {
-                return new Response(JSON.stringify({ message: 'Post not found' }), { status: 404 });
-            }
+            await updatePost(id, { title, content, tags, excerpt });
+            // updatePost returns void, so assume success if no error was thrown
+            return new Response(JSON.stringify({ message: 'Post updated' }), { status: 200 });
         } else {
             // Create new post
             const newPost = await createPost({ title, content, tags, excerpt });
