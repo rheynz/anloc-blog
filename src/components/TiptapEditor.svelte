@@ -2,7 +2,6 @@
   import { onMount, onDestroy } from "svelte";
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
-  import Image from "@tiptap/extension-image";
   import type { Post } from "../types";
 
   export let post: Post | null = null;
@@ -13,7 +12,6 @@
   let content = post?.content || "";
   let editorElement;
   let editor: Editor;
-  let fileInput: HTMLInputElement;
 
   // Reactive states for toolbar buttons
   let isBold,
@@ -27,49 +25,10 @@
     isOrderedList,
     isBlockquote;
 
-  async function uploadAndInsertImage(file: File) {
-    if (!file || !file.type.startsWith("image/")) {
-      alert("Silakan pilih file gambar.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await fetch("/api/upload-image", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Upload gagal");
-      }
-
-      const { url } = await res.json();
-
-      if (url) {
-        editor.chain().focus().setImage({ src: url }).run();
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert(`Gagal mengunggah gambar: ${error.message}`);
-    }
-  }
-
-  const handleFileSelect = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      uploadAndInsertImage(target.files[0]);
-      target.value = ""; // Reset file input
-    }
-  };
-
   onMount(() => {
     editor = new Editor({
       element: editorElement,
-      extensions: [StarterKit, Image],
+      extensions: [StarterKit],
       content: content,
       onUpdate: () => {
         content = editor.getHTML();
@@ -110,7 +69,7 @@
       tags: tagsString
         .split(",")
         .map((t) => t.trim())
-        .filter((t) => t), // Process tags string into array
+        .filter((t) => t),
       excerpt,
     };
 
@@ -123,13 +82,9 @@
     if (response.ok) {
       alert("Post saved successfully!");
       if (!post) {
-        // If this was a NEW post
         const newPost = await response.json();
-        // Redirect to the new post's edit page
         window.location.href = `/admin/editor?id=${newPost.slug}`;
       } else {
-        // If we were UPDATING an existing post
-        // Just reload the page to see the saved state
         window.location.reload();
       }
     } else {
@@ -194,15 +149,6 @@
     for="content-editor"
     class="block text-sm font-medium text-gray-700">Content</label
   >
-
-  <!-- Hidden file input triggered by the button -->
-  <input
-    type="file"
-    accept="image/*"
-    class="hidden"
-    bind:this={fileInput}
-    on:change={handleFileSelect}
-  />
 
   {#if editor}
     <div
@@ -303,23 +249,6 @@
           height="18"
           ><path fill="none" d="M0 0h24v24H0z" /><path
             d="M6 17h3l2-4V7H5v6h3l-2 4zm8 0h3l2-4V7h-6v6h3l-2 4z"
-          /></svg
-        >
-      </button>
-      <span class="toolbar-divider"></span>
-      <button
-        type="button"
-        on:click={() => fileInput.click()}
-        class="toolbar-button"
-        title="Add Image"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          ><path fill="none" d="M0 0h24v24H0z" /><path
-            d="M16 13l-4 4-4-4 1.5-1.5L12 14l2.5-2.5L16 13zm-1-5h2v2h-2V8zM4 18h16v2H4v-2zm13-9l-3-3-3 3h2v4h2V9h2zM3 3h18v2H3V3z"
           /></svg
         >
       </button>
