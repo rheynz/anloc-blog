@@ -2,40 +2,22 @@
 const isAuthenticated = Astro.cookies.has("auth-secret");
 ---
 
-<header class="bg-white shadow sticky top-0 z-50">
-  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <div class="flex-shrink-0">
-        <a href="/" class="text-2xl font-bold text-indigo-600">MyBlog</a>
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="/" class="text-gray-600 hover:text-gray-900 font-medium"
-          >Home</a
-        >
-        <a href="/blog" class="text-gray-600 hover:text-gray-900 font-medium"
-          >Blog</a
-        >
-        <a href="/tags" class="text-gray-600 hover:text-gray-900 font-medium"
-          >Tags</a
-        >
-        {
-          isAuthenticated ? (
-            <a
-              href="/api/logout"
-              class="text-indigo-600 hover:text-indigo-700 font-medium px-3 py-2 bg-indigo-100 rounded"
-            >
-              Logout
-            </a>
-          ) : (
-            <a
-              href="/admin"
-              class="text-indigo-600 hover:text-indigo-700 font-medium px-3 py-2 bg-indigo-100 rounded"
-            >
-              Admin
-            </a>
-          )
-        }
-      </div>
+<header>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <a href="/" class="brand">MyBlog</a>
+    <div class="nav-links" role="menubar">
+      <a href="/" role="menuitem">Home</a>
+      <a href="/blog" role="menuitem">Blog</a>
+      <a href="/tags" role="menuitem">Tags</a>
+      {isAuthenticated ? (
+        <a href="/api/logout" role="menuitem">
+          Logout
+        </a>
+      ) : (
+        <a href="/admin" role="menuitem">
+          Admin
+        </a>
+      )}
     </div>
   </nav>
 </header>

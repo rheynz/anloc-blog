@@ -2,23 +2,23 @@
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="mt-12 bg-gray-900 text-gray-100 py-8">
-  <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row justify-between items-center">
-      <div>
-        <p class="text-lg font-bold">MyBlog</p>
-        <p class="text-gray-400 text-sm">A modern blog built with Astro.</p>
-      </div>
-      <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="/blog" class="text-gray-400 hover:text-white">Blog</a>
-        <a href="/tags" class="text-gray-400 hover:text-white">Tags</a>
-        <a href="/rss.xml" class="text-gray-400 hover:text-white">RSS</a>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="brand" style="color:#fff;font-weight:700">MyBlog</div>
+      <div style="color:#9ca3af;font-size:0.9rem">
+        A modern blog built with Astro.
       </div>
     </div>
-    <div
-      class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm"
-    >
-      <p>&copy; {currentYear} MyBlog. All rights reserved.</p>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <a href="/blog" style="color:#9ca3af">Blog</a>
+      <a href="/tags" style="color:#9ca3af">Tags</a>
+      <a href="/rss.xml" style="color:#9ca3af">RSS</a>
     </div>
+  </div>
+  <div
+    style="text-align:center;margin-top:1rem;color:#9ca3af;font-size:0.85rem"
+  >
+    &copy; {currentYear} MyBlog. All rights reserved.
   </div>
 </footer>
