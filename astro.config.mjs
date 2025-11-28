@@ -6,5 +6,10 @@ import svelte from "@astrojs/svelte";
 export default defineConfig({
   output: 'server',
   adapter: cloudflare(),
-  integrations: [svelte()]
+  integrations: [svelte()],
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/noop'
+    }
+  }
 });
