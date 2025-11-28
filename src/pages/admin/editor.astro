@@ -5,8 +5,22 @@ import TiptapEditor from "../../components/TiptapEditor.svelte";
 import { getPost } from "../../services/posts";
 
 const postId = Astro.url.searchParams.get("id");
-const post = postId ? await getPost(postId) : null;
-const pageTitle = postId ? "Edit Post" : "New Post";
+let post = null;
+let pageTitle = "New Post";
+
+if (postId) {
+  try {
+    post = await getPost(postId);
+    if (!post) {
+      // Jika id tidak valid / post tidak ditemukan, kembalikan ke dashboard
+      return Astro.redirect("/admin");
+    }
+    pageTitle = "Edit Post";
+  } catch (err) {
+    console.error("Error fetching post:", err);
+    return Astro.redirect("/admin");
+  }
+}
 ---
 
 <AdminLayout title={pageTitle}>
