@@ -1,0 +1,5 @@
+{
+  "name": "Klub Mobil Modern - Blog & Pendaftaran",
+  "description": "Sebuah aplikasi web blog modern dengan panel admin terintegrasi untuk manajemen konten dan anggota klub mobil. Dibangun dengan React, TypeScript, dan Tailwind CSS.",
+  "requestFramePermissions": []
+}

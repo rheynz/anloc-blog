@@ -1,0 +1,31 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getAllTags, getPostsByTag } from "../../services/posts";
+import PostPreview from "../../components/PostPreview.astro";
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  return tags.map((tag) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const posts = await getPostsByTag(tag);
+---
+
+<MainLayout title={`Posts tagged with "${tag}"`}>
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">
+      Posts tagged with <span class="text-indigo-600">#{tag}</span>
+    </h1>
+    <div class="space-y-4">
+      {posts.map((post) => <PostPreview post={post} />)}
+    </div>
+    <div class="mt-8">
+      <a href="/blog" class="text-indigo-600 hover:text-indigo-800"
+        >&larr; Back to all posts</a
+      >
+    </div>
+  </main>
+</MainLayout>

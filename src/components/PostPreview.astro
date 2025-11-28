@@ -1,0 +1,37 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+
+interface Props {
+  post: {
+    slug: string;
+    data?: {
+      title: string;
+      publishedAt: Date;
+      excerpt?: string;
+    };
+    title?: string;
+    publishedAt?: Date;
+    excerpt?: string;
+  };
+}
+
+const { post } = Astro.props;
+
+const slug = post.slug;
+// Handles data from both Astro's getCollection (in post.data) and our custom service (at root)
+const postData = post.data ? post.data : post;
+---
+
+<div class="bg-white shadow overflow-hidden sm:rounded-md p-4">
+  <a href={`/posts/${slug}`} class="block hover:bg-gray-50 -m-4 p-4">
+    <p class="text-xl font-medium text-indigo-600 truncate">{postData.title}</p>
+    {
+      postData.excerpt && (
+        <p class="mt-2 text-sm text-gray-600">{postData.excerpt}</p>
+      )
+    }
+    <div class="text-sm text-gray-500 mt-2">
+      <FormattedDate date={new Date(postData.publishedAt)} />
+    </div>
+  </a>
+</div>

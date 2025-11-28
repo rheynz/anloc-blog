@@ -1,0 +1,18 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import PostPreview from "../../components/PostPreview.astro";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+---
+
+<MainLayout title="Blog">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Blog Posts</h1>
+    <div class="space-y-4">
+      {posts.map((post) => <PostPreview post={post} />)}
+    </div>
+  </main>
+</MainLayout>

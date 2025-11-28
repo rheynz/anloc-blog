@@ -1,0 +1,45 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, publishedAt, tags, excerpt } = post.frontmatter;
+---
+
+<MainLayout title={title} description={excerpt}>
+  <main class="container mx-auto px-4 py-8">
+    <article class="prose lg:prose-xl mx-auto">
+      <h1>{title}</h1>
+      <div class="text-sm text-gray-500">
+        <FormattedDate date={new Date(publishedAt)} />
+      </div>
+      <Content />
+
+      {
+        tags && tags.length > 0 && (
+          <div class="mt-8">
+            <strong>Tags:</strong>
+            {tags.map((tag) => (
+              <a
+                href={`/tags/${tag}`}
+                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 hover:bg-gray-300"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </article>
+  </main>
+</MainLayout>

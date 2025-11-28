@@ -1,0 +1,21 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import TiptapEditor from "../../components/TiptapEditor.svelte";
+
+import { getPost } from "../../services/posts";
+
+const postId = Astro.url.searchParams.get("id");
+const post = postId ? await getPost(postId) : null;
+const pageTitle = postId ? "Edit Post" : "New Post";
+---
+
+<MainLayout title={pageTitle}>
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-4">
+      <a href="/admin" class="text-indigo-600 hover:text-indigo-800"
+        >&larr; Back to Admin Dashboard</a
+      >
+    </div>
+    <TiptapEditor client:only="svelte" post={post} />
+  </main>
+</MainLayout>
