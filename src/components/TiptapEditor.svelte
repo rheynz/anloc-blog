@@ -69,7 +69,7 @@
       tags: tagsString
         .split(",")
         .map((t) => t.trim())
-        .filter((t) => t),
+        .filter(Boolean),
       excerpt,
     };
 
@@ -82,13 +82,18 @@
     if (response.ok) {
       alert("Post saved successfully!");
       if (!post) {
-        const newPost = await response.json();
-        window.location.href = `/admin/editor?id=${newPost.slug}`;
+        const newPost = await response.json().catch(() => null);
+        if (newPost?.slug)
+          window.location.href = `/admin/editor?id=${newPost.slug}`;
+        else window.location.href = "/admin";
       } else {
         window.location.reload();
       }
     } else {
-      alert("Failed to save post.");
+      const err = await response
+        .json()
+        .catch(() => ({ message: "Save not supported" }));
+      alert(err.message || "Failed to save post.");
     }
   }
 
